@@ -14,7 +14,9 @@ function Segment() {
     draggable: true,
   }
 
-  const [opt, setOPT] = useState(['FirstName', 'LastName', 'Gender', 'Age', 'Account Name', 'City', 'State'])
+  const schemaKeys = ['FirstName', 'LastName', 'Gender', 'Age', 'Account Name', 'City', 'State']
+
+  const [opt, setOPT] = useState(schemaKeys)
 
   const [name, setName] = useState('')
 
@@ -48,12 +50,10 @@ function Segment() {
     setSchema([...schema])
   }
 
-
   const sendData = () => {
     schema.forEach(e => {
       finalArray.push({ [e.name]: e.value })
     })
-    console.log(finalArray);
     if (isValidationSuccess()) {
       postSchema()
     }
@@ -86,7 +86,10 @@ function Segment() {
       schema: finalArray
     }
     await axios.post('https://webhook.site/4ceff5cd-12b2-4d04-8f97-d8b97b3f641c', data)
-      .then(rel => alert('Post schema successfully'))
+      .then(rel => {
+        alert('Post schema successfully')
+        window.location.reload()
+      })
       .catch(err => toast.error('Something went worng please try again later.', toastOption))
   }
 
@@ -155,11 +158,14 @@ function Segment() {
                       })
                     }
                   </div>
-                  <a id='addElements' className='text text-success fs-6 mt-5' style={{ cursor: 'pointer' }} onClick={createInput}>+ Add new schema</a>
+                  {
+                    opt.length > 0 ?
+                      <a id='addElements' className='text text-success fs-6 mt-5' style={{ cursor: 'pointer' }} onClick={createInput}>+ Add new schema</a> : null
+                  }
                 </div>
               </div>
               <div className='modal-footer'>
-                <button type='button' onClick={sendData} className='btn btn-success'>Save Segment</button>
+                <button type='button' onClick={sendData} data-bs-dismiss='modal' className='btn btn-success'>Save Segment</button>
                 <button type='button' className='btn btn-secondary' data-bs-dismiss='modal'>Close</button>
               </div>
             </div>
