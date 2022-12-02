@@ -5,6 +5,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function Segment() {
 
+
+
+
   let finalArray = [];
 
   const toastOption = {
@@ -81,16 +84,29 @@ function Segment() {
   }
 
   const postSchema = async () => {
-    let data = {
-      segment_name: name,
-      schema: finalArray
-    }
-    await axios.post('https://webhook.site/4ceff5cd-12b2-4d04-8f97-d8b97b3f641c', data)
-      .then(rel => {
+
+    var data = JSON.stringify({
+      'schema': finalArray,
+      'segment_name': name
+    });
+
+    var config = {
+      method: 'post',
+      url: 'https://webhook.site/f59d10ed-a4a4-422e-a332-fa57a66f93da',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: data
+    };
+
+    axios(config)
+      .then(function (response) {
         alert('Post schema successfully')
         window.location.reload()
       })
-      .catch(err => toast.error('Something went worng please try again later.', toastOption))
+      .catch(function (error) {
+        toast.error('Something went worng please try again later.', toastOption)
+      });
   }
 
   return (
